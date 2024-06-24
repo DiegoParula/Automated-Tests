@@ -2,6 +2,7 @@ package ParaBank;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class TransferFunds extends BasePage {
@@ -26,6 +27,7 @@ public class TransferFunds extends BasePage {
     }
 
     public String titleTransfer() throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(txtTransfer));
         String res = this.getText(txtTransfer);
         System.out.println(res);
         return res;
@@ -56,6 +58,7 @@ public class TransferFunds extends BasePage {
     }
 
     public String transferComplete() throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(txtTransferComplete));
         String res = this.getText(txtTransferComplete);
         System.out.println(res);
         return res;

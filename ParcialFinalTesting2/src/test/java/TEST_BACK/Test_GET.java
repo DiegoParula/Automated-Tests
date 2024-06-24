@@ -103,7 +103,7 @@ public class Test_GET {
         test.log(Status.INFO, "Comienza el Test");
         System.out.println("Iniciando Tercer Test Get");
         test.log(Status.INFO, "Iniciando Tercer Test Get");
-        Response responseGet = RestAssured.get("https://parabank.parasoft.com/parabank/services_proxy/bank/accounts/13766/transactions/month/All/type/All");
+        Response responseGet = RestAssured.get("https://parabank.parasoft.com/parabank/services_proxy/bank/accounts/13100/transactions/month/All/type/All");
 
         int statusCode = responseGet.statusCode();
         System.out.println(statusCode);

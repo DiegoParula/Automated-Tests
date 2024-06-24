@@ -38,7 +38,7 @@ public class testLogin {
         driver = new ChromeDriver(options);
         wait = new WebDriverWait(driver, Duration.ofMillis(5000));
         LoginPage loginPage = new LoginPage(driver, wait);
-        loginPage.getUrl("https://digital-booking-front.digitalhouse.com/login");
+        loginPage.getUrl("https://parabank.parasoft.com/parabank/index.htm");
     }
 
     @Test
@@ -46,18 +46,18 @@ public class testLogin {
     public void test_LogueoExitoso() throws InterruptedException {
         ExtentTest test = extent.createTest("Logueo Exitoso");
         test.log(Status.INFO, "Comienza el Test");
-        test.log(Status.PASS, "Ingreso en el Login de Digital Booking");
         LoginPage loginPage = new LoginPage(driver, wait);
         try {
-            loginPage.completarMail("targ5181@gmail.com");
-            loginPage.completarContraseña("Admin123.");
+            loginPage.insertUsername("eldiego");
+            loginPage.insertPassword("123456");
             test.log(Status.PASS, "Ingreso todos los datos del Login");
-            loginPage.clickIngresar();
+            loginPage.clickLogIn();
 
-            if (loginPage.nombreLogueado().equals("tania rodriguez")) {
-                test.log(Status.PASS, "Validar nombre usuario en el login");
+            if (loginPage.getTitleAccountOverview().equals("Accounts Overview")) {
+                test.log(Status.PASS, "Validando el titulo que aparece luego del login exitoso");
             } else {
-                test.log(Status.FAIL, "Fallo validación del nombre del usuario");
+                test.log(Status.FAIL, "Fallo validando el titulo que aparece luego del login exitoso");
+                System.out.println("Fallo validando el titulo que aparece luego del login exitoso");
             }
 
             test.log(Status.PASS, "Validación de Login Exitoso");
@@ -67,7 +67,7 @@ public class testLogin {
         }
         test.log(Status.INFO, "Finaliza el Test");
     }
-
+/*
     @Test
     @Tag("FALLIDO")
     public void test_LogueoMailVacio() throws InterruptedException {
@@ -121,7 +121,7 @@ public class testLogin {
         assertTrue(valida.equals("El email es inválido"));
         test.log(Status.PASS, "Validación de email Invalido");
         test.log(Status.INFO, "Finaliza el Test");
-    }
+    }*/
 
     @AfterEach
     public void endTest() throws InterruptedException {

@@ -11,7 +11,7 @@ public class RegisterPage extends BasePage{
     private By address = By.id("customer.address.street");
     private By city = By.id("customer.address.city");
     private By state = By.id("customer.address.state");
-    private By zip = By.id("customer.address.zip");
+    private By zip = By.id("customer.address.zipCode");
     private By phone = By.id("customer.phoneNumber");
     private By ssn = By.id("customer.ssn");
     private By userName = By.id("customer.username");
@@ -20,6 +20,8 @@ public class RegisterPage extends BasePage{
     private By btnSubmitRegister = By.xpath("//*[@id=\"customerForm\"]/table/tbody/tr[13]/td[2]/input");
     private By messageSuccess = By.xpath("//*[@id=\"rightPanel\"]/p");
     //Your account was created successfully. You are now logged in.
+
+    private By errorPass = By.id("repeatedPassword.errors");
 
 
     public RegisterPage(WebDriver driver, WebDriverWait wait) {
@@ -80,4 +82,9 @@ public class RegisterPage extends BasePage{
         return res;
     }
 
+    public String getMessageErrorPass() throws InterruptedException {
+        String res = this.getText(errorPass);
+        System.out.println(res);
+        return res;
+    }
 }

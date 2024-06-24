@@ -2,6 +2,7 @@ package ParaBank;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AccountOverview extends BasePage{
@@ -11,7 +12,7 @@ public class AccountOverview extends BasePage{
     public By account = By.xpath("//*[@id=\"accountTable\"]/tbody/tr[1]/td[1]/a");
     public By accountDetails = By.xpath("//*[@id=\"accountDetails\"]/h1");
     public By activityPeriod = By.id("month");
-    public By getActivityPeriodAll = By.xpath("//*[@id=\"ç\"]/option[1]");
+    public By getActivityPeriodAll = By.xpath("//*[@id=\"month\"]/option[1]");
     public By type = By.id("transactionType");
     public By getTypeAll = By.xpath("//*[@id=\"transactionType\"]/option[1]");
     public By submitGo = By.xpath("//*[@id=\"activityForm\"]/table/tbody/tr[3]/td[2]/input");
@@ -37,6 +38,7 @@ public class AccountOverview extends BasePage{
     }
 
     public String getAccountDetails() throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(accountDetails));
         String res = this.getText(accountDetails);
         System.out.println(res);
         return res;
@@ -47,12 +49,15 @@ public class AccountOverview extends BasePage{
     }
 
     public void clickGetActivityPeriodAll() throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(getActivityPeriodAll));
         this.click(getActivityPeriodAll);
+
     }
     public void clickType() throws InterruptedException {
         this.click(type);
     }
     public void getTypeAll() throws InterruptedException {
+        wait.until(ExpectedConditions.elementToBeClickable(getTypeAll));
         this.click(getTypeAll);
     }
 

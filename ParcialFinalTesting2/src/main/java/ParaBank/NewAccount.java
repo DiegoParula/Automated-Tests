@@ -2,6 +2,7 @@ package ParaBank;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class NewAccount extends BasePage{
@@ -44,6 +45,11 @@ public class NewAccount extends BasePage{
     }
 
     public String getMessageSuccess() throws InterruptedException {
-        return this.getText(messageSuccess);
+        wait.until(ExpectedConditions.elementToBeClickable(messageSuccess));
+        String res = this.getText(messageSuccess);
+        System.out.println(res);
+        return res;
+
+
     }
 }
