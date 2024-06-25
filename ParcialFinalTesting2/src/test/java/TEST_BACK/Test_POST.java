@@ -14,6 +14,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import reportes.ReportFactory;
 
+import java.util.Base64;
+
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
@@ -27,6 +29,9 @@ public class Test_POST {
     public static void setup() {
         extent = ReportFactory.getInstance();
         extent.attachReporter(info);
+
+        RestAssured.useRelaxedHTTPSValidation();
+        RestAssured.config = RestAssured.config().redirect(RestAssured.config().getRedirectConfig().followRedirects(true));
     }
 
     @AfterAll
@@ -76,9 +81,14 @@ public class Test_POST {
         // Comprueba que la autenticación fue exitosa
         if (authResponse.statusCode() == 200) {
             customerId = authResponse.xmlPath().getInt("customer.id");
-            String cookie = authResponse.getDetailedCookies().getValue("JSESSIONID");
+           // String cookie = authResponse.getDetailedCookies().getValue("JSESSIONID");
             System.out.println(customerId);
-            System.out.println(cookie);
+            //System.out.println(cookie);
+
+            System.out.println("Auth Response Status Code: " + authResponse.getStatusCode());
+            System.out.println("Auth Response Headers: " + authResponse.getHeaders().toString());
+            System.out.println("Auth Response Body: " + authResponse.getBody().asString());
+
 
             // System.out.println("Status Code: " + authResponse.getStatusCode());
 
@@ -106,25 +116,29 @@ public class Test_POST {
             test.log(Status.FAIL, "Error de autenticación");
         }
 
-
+        //Response responseGet = RestAssured.get("http://parabank.parasoft.com/parabank/services/bank/customers/"+customerId+"/accounts");
 
 
         JsonObject request2 = new JsonObject();
         request2.addProperty("customerId", customerId);
         request2.addProperty("newAccountType", 1);
-        request2.addProperty("fromAccountId", 14898);
+        request2.addProperty("fromAccountId", 14121);
 
         given()
                 .contentType("application/json")
-                //.header("Authorization", "Bearer " + token)
-                .body(request)
-                .when().post("http://parabank.parasoft.com/parabank/services/bank/createAccount")
+                .header("Authorization", "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes()))
+                //.body(request2)
+                .queryParam("customerId", customerId)
+                .queryParam("newAccountType", 1)
+                .queryParam("fromAccountId", 14121)
+                .when().post("https://parabank.parasoft.com/parabank/services_proxy/bank/createAccount")
                 .then()
                 .statusCode(200)
                 .log().status()
                 .log().body();
 
-        test.log(Status.INFO, "Status Code: " + given().get().statusCode());
+        //System.out.println(given().get().getStatusCode());
+        //test.log(Status.INFO, "Status Code: " + given().get().statusCode());
         System.out.println("Primer Test Post finalizado");
         test.log(Status.PASS, "Primer Test Post finalizado");
     }
@@ -158,4 +172,57 @@ public class Test_POST {
         System.out.println("Segundo Test Post finalizado");
         test.log(Status.PASS, "Segundo Test Post finalizado");
     }
+    /* @Test
+    @Tag("POST")
+    @Tag("ABRIR_CUENTA")
+    public void TEST01_POST_ABRIR_CUENTA() {
+        test = extent.createTest("PRIMER TEST POST - ABRIR CUENTA NUEVA ");
+        test.log(Status.INFO, "Comienza Test para abrir cuenta");
+
+        System.out.println("Iniciando Primer Test Post");
+        test.log(Status.INFO, "Iniciando Primer Test Post");
+
+
+        given()
+                .auth().basic("eldiego", "123456")
+                .contentType("application/x-www-form-urlencoded")
+                .formParam("customerId", "13700")
+                .formParam("newAccountType", "1")
+                .formParam("fromAccountId", "24333")
+                .when().post("https://parabank.parasoft.com/parabank/services_proxy/bank/createAccount")
+                .then()
+                .statusCode(200)
+                .log().status()
+                .log().body();
+
+        System.out.println("Primer Test Post finalizado");
+        test.log(Status.PASS, "Primer Test Post finalizado");
+    }
+
+    @Test
+    @Tag("POST")
+    @Tag("TRANSFERIR_FONDOS")
+    public void TEST02_POST_TRANSFERIR_FONDOS() {
+        test = extent.createTest("SEGUNDO TEST POST - TRANSFERIR FONDOS");
+        test.log(Status.INFO, "Iniciando Test de Transferencia de fondos");
+
+        System.out.println("Iniciando Segundo Test Post");
+        test.log(Status.INFO, "Iniciando Segundo Test Post");
+
+        given()
+                .auth().basic("eldiego", "123456")
+                .contentType("application/x-www-form-urlencoded")
+                .formParam("fromAccountId", "14277")
+                .formParam("toAccountId", "14600")
+                .formParam("amount", "2000")
+                .when().post("https://parabank.parasoft.com/parabank/services_proxy/bank/transfer")
+                .then()
+                .statusCode(200)
+                .log().status()
+                .log().body();
+
+        System.out.println("Segundo Test Post finalizado");
+        test.log(Status.PASS, "Segundo Test Post finalizado");
+    }
+*/
 }

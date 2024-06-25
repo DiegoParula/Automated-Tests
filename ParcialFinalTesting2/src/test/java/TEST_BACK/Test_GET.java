@@ -116,4 +116,69 @@ public class Test_GET {
         System.out.println("Tercer Test Get finalizado");
         test.log(Status.PASS, "Tercer Test Get finalizado");*/
     }
+    /*
+        @Test
+    @Tag("GET")
+    @Tag("REGISTRO")
+    public void TEST01_GET_REGISTRO() {
+        ExtentTest test = extent.createTest("PRIMER TEST GET - REGISTRO");
+        test.log(Status.INFO, "Iniciando Test de registro");
+
+        System.out.println("Iniciando Primer Test Get");
+        test.log(Status.INFO, "Iniciando Primer Test Get");
+
+        given()
+                .get("https://parabank.parasoft.com/parabank/register.htm")
+                .then().statusCode(200)
+                .log().body();
+
+        System.out.println("Primer Test Get finalizado");
+        test.log(Status.PASS, "Test de registro finalizado");
+    }
+
+    @Test
+    @Tag("GET")
+    @Tag("RESUMEN_CUENTAS")
+    public void TEST02_GET_RESUMEN_CUENTAS() {
+        ExtentTest test = extent.createTest("SEGUNDO TEST GET - RESUMEN DE CUENTAS");
+        test.log(Status.INFO, "Iniciando Test de Resumen de Cuentas");
+
+        System.out.println("Iniciando Segundo Test Get");
+        test.log(Status.INFO, "Iniciando Segundo Test Get");
+
+        given()
+                .auth().basic("eldiego", "123456")
+                .get("https://parabank.parasoft.com/parabank/overview.htm")
+                .then()
+                .statusCode(200)
+                .log().status()
+                .log().body();
+
+        System.out.println("Segundo Test Get finalizado");
+        test.log(Status.PASS, "Test de Resumen de Cuentas finalizado");
+    }
+
+
+    @Test
+    @Tag("GET")
+    @Tag("ACTIVIDAD_CUENTA")
+    public void TEST03_GET_ACTIVIDAD_CUENTA() {
+        ExtentTest test = extent.createTest("TERCER TEST GET - ACTIVIDAD DE LA CUENTA");
+        test.log(Status.INFO, "Iniciando Test de actividad de la cuenta");
+
+        System.out.println("Iniciando Tercer Test Get");
+        test.log(Status.INFO, "Iniciando Tercer Test Get");
+
+        given()
+                .auth().basic("eldiego", "123456")
+                .get("https://parabank.parasoft.com/parabank/services_proxy/bank/accounts/13566/transactions/month/All/type/All")
+                .then()
+                .statusCode(200)
+                .log().status()
+                .log().body();
+
+        System.out.println("Tercer Test Get finalizado");
+        test.log(Status.PASS, "Test de Actividad de la cuenta finalizado");
+    }*/
+
 }
