@@ -41,7 +41,7 @@ public class Test_POST {
         extent.flush();
     }
     //Abrir una nueva cuenta URL:
-    //https://parabank.parasoft.com/parabank/services_proxy/bank/createAccount?cust omerId=12545&newAccountType=1&fromAccountId=xxxxx
+    //https://parabank.parasoft.com/parabank/services_proxy/bank/createAccount?customerId=12545&newAccountType=1&fromAccountId=xxxxx
     @Test
     @Tag("POST")
     @Tag("ABRI_CUENTA")
