@@ -24,6 +24,17 @@ public class RegisterPage extends BasePage{
 
     private By errorPass = By.id("repeatedPassword.errors");
 
+    private By messageFirstName = By.id("customer.firstName.errors");
+    private By messageLastName = By.id("customer.lastName.errors");
+    private By messageAddress = By.id("customer.address.street.errors");
+    private By messageCity = By.id("customer.address.city.errors");
+    private By messageState = By.id("customer.address.state.errors");
+    private By messageZip = By.id("customer.address.zipCode.errors");
+    private By messageSsn = By.id("customer.ssn.errors");
+
+    private By messagePassword = By.id("customer.password.errors");
+   ;
+
 
     public RegisterPage(WebDriver driver, WebDriverWait wait) {
         super(driver, null);
@@ -91,6 +102,54 @@ public class RegisterPage extends BasePage{
 
     public String getMessageUserNameError() throws InterruptedException {
         String res = this.getText(messageUserNameError);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageFirstNameError()throws InterruptedException {
+        String res = this.getText(messageFirstName);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageLasteNameError()throws InterruptedException {
+        String res = this.getText(messageLastName);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageAdressError()throws InterruptedException {
+        String res = this.getText(messageAddress);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageCityError()throws InterruptedException {
+        String res = this.getText(messageCity);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageStateError()throws InterruptedException {
+        String res = this.getText(messageState);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageZipError()throws InterruptedException {
+        String res = this.getText(messageZip);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageSsnError()throws InterruptedException {
+        String res = this.getText(messageSsn);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessagePasswordError()throws InterruptedException {
+        String res = this.getText(messagePassword);
         System.out.println(res);
         return res;
     }

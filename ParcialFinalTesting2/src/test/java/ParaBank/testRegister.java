@@ -191,6 +191,523 @@ public class testRegister {
 
 
     }
+
+    @Test
+    @Order(4)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoNombreVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Nombre Vacío");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "First name is required.";
+        String mss = "";
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+
+            registerPage.insertName("");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto el nombre para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageFirstNameError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que el nombre no puede estar vacío exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de nombre vacío. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_NOMBRE", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Order(5)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoApellidoVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Apellido Vacío");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "Last name is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto el apellido para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageLasteNameError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que el apellido no puede estar vacío exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de apellido vacío. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_APELLIDO", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Order(6)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoDireccionVacia() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Dirección Vacía");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "Address is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto la dirección para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageAdressError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que la dirección no puede estar vacía exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de dirección vacía. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_DIRECCION", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Order(7)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoCiudadVacia() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Ciudad Vacía");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "City is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            // Dejar el campo de ciudad vacío
+            registerPage.insertCity("");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto la ciudad para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageCityError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que la ciudad no puede estar vacía exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de ciudad vacía. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_CIUDAD", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Order(8)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoEstadoVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Estado Vacío");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "State is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto el estado para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageStateError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que el estado no puede estar vacío exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de estado vacío. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_ESTADO", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Order(9)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoCodigoPostalVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Código Postal Vacío");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "Zip Code is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto el código postal para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageZipError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que el código postal no puede estar vacío exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de código postal vacío. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_ZIP", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Order(10)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoSSNVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido SSN Vacío");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "Social Security Number is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto el SSN para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageSsnError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que el SSN no puede estar vacío exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de SSN vacío. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_SSN", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Order(12)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoUsernameVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Usuario Vacío");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "Username is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto el nombre de usuario para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageUserNameError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que el nombre de usuario no puede estar vacío exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de nombre de usuario vacío. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_USERNAME", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+
+    @Test
+    @Order(13)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoPasswordVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Contraseña Vacía");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "Password is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto la contraseña para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessagePasswordError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que la contraseña no puede estar vacía exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de contraseña vacía. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_PASSWORD", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+
+
+
+
+    @Test
+    @Order(14)
+    @Tag("REGISTRO")
+    @Tag("FALLIDO")
+    public void RegistroFallidoRePasswordVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Confirmación de Contraseña Vacía");
+        test.log(Status.INFO, "Comienza el Test");
+
+        String expectedMessage = "Password confirmation is required.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
+
+        try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("");
+
+            test.log(Status.PASS, "Ingreso todos los datos excepto la confirmación de contraseña para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageErrorPass();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que la confirmación de contraseña no puede estar vacía exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de confirmación de contraseña vacía. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_REPASSWORD", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
 /*
     @Test
     @Order(5)
