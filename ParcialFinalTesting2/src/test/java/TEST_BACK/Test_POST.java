@@ -24,6 +24,8 @@ public class Test_POST {
     static ExtentSparkReporter info = new ExtentSparkReporter("reportes/APIPOST-Test.html");
     static ExtentReports extent;
     ExtentTest test;
+    private static final String USERNAME = "eldiego";
+    private static final String PASSWORD = "123456";
 
     @BeforeAll
     public static void setup() {
@@ -51,7 +53,7 @@ public class Test_POST {
         test.log(Status.INFO, "Iniciando Primer Test Post");
 
         given()
-                .auth().basic("eldiego", "123456")
+                .auth().basic(USERNAME, PASSWORD)
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("customerId", "13700")
                 .formParam("newAccountType", "1")
@@ -64,99 +66,6 @@ public class Test_POST {
 
         System.out.println("Primer Test Post finalizado");
         test.log(Status.PASS, "Primer Test Post finalizado");
-
-//        String token = null;
-//        int customerId = 0;
-//
-//        /*JsonObject request = new JsonObject();
-//        request.addProperty("username", "eldiego");
-//        request.addProperty("password", "123456");
-//
-//
-//        given()
-//                .contentType("application/json")
-//                .body(request)
-//                .when().get("http://parabank.parasoft.com/parabank/services/bank/login")
-//                .then()
-//                .statusCode(200)
-//                .log().status()
-//                .log().body();*/
-//
-//        // Realiza la autenticación y obtiene el token
-//        String authUrl = "http://parabank.parasoft.com/parabank/services/bank/login";
-//        String username = "eldiego";
-//        String password = "123456";
-//
-//        RequestSpecification request = RestAssured.given();
-//        request.header("Content-Type", "application/json");
-//        request.body("{\"username\":\"" + username + "\", \"password\":\"" + password + "\"}");
-//
-//        //Response authResponse = request.get(authUrl);
-//
-//        Response authResponse = RestAssured.get("http://parabank.parasoft.com/parabank/services/bank/login/"+username+"/"+password);
-//        // Comprueba que la autenticación fue exitosa
-//        if (authResponse.statusCode() == 200) {
-//            customerId = authResponse.xmlPath().getInt("customer.id");
-//           // String cookie = authResponse.getDetailedCookies().getValue("JSESSIONID");
-//            System.out.println(customerId);
-//            //System.out.println(cookie);
-//
-//            System.out.println("Auth Response Status Code: " + authResponse.getStatusCode());
-//            System.out.println("Auth Response Headers: " + authResponse.getHeaders().toString());
-//            System.out.println("Auth Response Body: " + authResponse.getBody().asString());
-//
-//
-//            // System.out.println("Status Code: " + authResponse.getStatusCode());
-//
-//           // System.out.println("Response Body: " + authResponse.getBody().asString());
-//           // System.out.println("Response Headers: " + authResponse.getHeaders().toString());
-////            token = authResponse.jsonPath().getString("token"); // Ajusta según la respuesta del servidor
-//
-//            /*// Realiza la solicitud GET autenticada
-//            Response responseGet = RestAssured.given()
-//                    .header("Authorization", "Bearer " + token)
-//                    .get("https://parabank.parasoft.com/parabank/services_proxy/bank/accounts/13766/transactions/month/All/type/All");
-//
-//            int statusCode = responseGet.statusCode();
-//            System.out.println(statusCode);
-//            test.log(Status.INFO, "Status Code: " + statusCode);
-//
-//            // Loguear el cuerpo de la respuesta
-//            String responseBody = responseGet.getBody().asString();
-//            System.out.println(responseBody);
-//            test.log(Status.INFO, "Response Body: " + responseBody);*/
-//
-//            test.log(Status.PASS, "Logueado Correctamente");
-//        } else {
-//            System.out.println("Error de autenticación");
-//            test.log(Status.FAIL, "Error de autenticación");
-//        }
-//
-//        //Response responseGet = RestAssured.get("http://parabank.parasoft.com/parabank/services/bank/customers/"+customerId+"/accounts");
-//
-//
-//        JsonObject request2 = new JsonObject();
-//        request2.addProperty("customerId", customerId);
-//        request2.addProperty("newAccountType", 1);
-//        request2.addProperty("fromAccountId", 14121);
-//
-//        given()
-//                .contentType("application/json")
-//                .header("Authorization", "Basic " + Base64.getEncoder().encodeToString((username + ":" + password).getBytes()))
-//                //.body(request2)
-//                .queryParam("customerId", customerId)
-//                .queryParam("newAccountType", 1)
-//                .queryParam("fromAccountId", 14121)
-//                .when().post("https://parabank.parasoft.com/parabank/services_proxy/bank/createAccount")
-//                .then()
-//                .statusCode(200)
-//                .log().status()
-//                .log().body();
-//
-//        //System.out.println(given().get().getStatusCode());
-//        //test.log(Status.INFO, "Status Code: " + given().get().statusCode());
-//        System.out.println("Primer Test Post finalizado");
-//        test.log(Status.PASS, "Primer Test Post finalizado");
     }
 
     //Descarga de fondos URL: https://parabank.parasoft.com/parabank/services_proxy/bank/transfer?fromAccountId=13566&toAccountId=13677&amount=xxxxx
@@ -171,7 +80,7 @@ public class Test_POST {
         test.log(Status.INFO, "Iniciando Segundo Test Post");
 
         given()
-                .auth().basic("eldiego", "123456")
+                .auth().basic(USERNAME, PASSWORD)
                 .contentType("application/x-www-form-urlencoded")
                 .formParam("fromAccountId", "14277")
                 .formParam("toAccountId", "14600")

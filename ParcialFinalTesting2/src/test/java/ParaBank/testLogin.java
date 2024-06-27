@@ -13,6 +13,7 @@ import reportes.ReportFactory;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static reportes.ReportFactory.captureScreenshot;
 
@@ -46,82 +47,148 @@ public class testLogin {
     public void test_LogueoExitoso() throws InterruptedException {
         ExtentTest test = extent.createTest("Logueo Exitoso");
         test.log(Status.INFO, "Comienza el Test");
+
         LoginPage loginPage = new LoginPage(driver, wait);
+        String expectedTitle = "Accounts Overview";
+        String actualTitle = "";
+
         try {
             loginPage.insertUsername("eldiego");
             loginPage.insertPassword("123456");
             test.log(Status.PASS, "Ingreso todos los datos del Login");
+
             loginPage.clickLogIn();
+            test.log(Status.PASS, "Presiono el botón Log In");
 
-            if (loginPage.getTitleAccountOverview().equals("Accounts Overview")) {
-                test.log(Status.PASS, "Validando el titulo que aparece luego del login exitoso");
-            } else {
-                test.log(Status.FAIL, "Fallo validando el titulo que aparece luego del login exitoso");
-                System.out.println("Fallo validando el titulo que aparece luego del login exitoso");
-            }
+            actualTitle = loginPage.getTitleAccountOverview();
+            test.log(Status.INFO, "Obtengo el título de la página: " + actualTitle);
 
-            test.log(Status.PASS, "Validación de Login Exitoso");
-        } catch (Exception error) {
-            test.log(Status.FAIL, "FALLO EL TEST DE LOGIN" + error.getMessage());
-            captureScreenshot(test, "FAIL_LoginExitoso", driver);
+            assertEquals(expectedTitle, actualTitle);
+            test.log(Status.PASS, "Validación del título luego del login exitoso");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación del título. Título esperado: '" + expectedTitle + "', pero fue: '" + actualTitle + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_TITULO", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Fallo el test de login: " + e.getMessage());
+            captureScreenshot(test, "FAIL_LOGIN_EXITO", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
         }
-        test.log(Status.INFO, "Finaliza el Test");
-    }
-/*
-    @Test
-    @Tag("FALLIDO")
-    public void test_LogueoMailVacio() throws InterruptedException {
-        ExtentTest test = extent.createTest("Logueo Fallido por Email Vacio");
-        test.log(Status.INFO, "Comienza el Test");
-        test.log(Status.PASS, "Ingreso en el Login de Digital Booking");
-        LoginPage loginPage = new LoginPage(driver, wait);
-
-        loginPage.completarMail("");
-        loginPage.completarContraseña("Admin123.");
-        test.log(Status.PASS, "Ingreso contraseña sin completar el campo email");
-
-        String valida = loginPage.validaMailObligatorio();
-        assertTrue(valida.equals("Este campo es obligatorio"));
-        test.log(Status.PASS, "Validación de campo de Email obligatorio");
-        test.log(Status.INFO, "Finaliza el Test");
     }
 
     @Test
     @Tag("FALLIDO")
-    public void test_LogueoContraseñaVacio() throws InterruptedException {
-        ExtentTest test = extent.createTest("Logueo Fallido Contraseña Vacia");
+    public void test_LogueoUserNameVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Logueo Fallido por USERNAME Vacio");
         test.log(Status.INFO, "Comienza el Test");
-        test.log(Status.PASS, "Ingreso en el Login de Digital Booking");
+
         LoginPage loginPage = new LoginPage(driver, wait);
+        String expectedMessage = "Please enter a username and password.";
+        String actualMessage = "";
 
-        loginPage.completarMail("targ5181@gmail.com");
-        loginPage.completarContraseña("");
-        test.log(Status.PASS, "Ingreso email sin completar el campo contraseña");
-        loginPage.clickIngresar();
+        try {
+            test.log(Status.PASS, "Ingreso en el Login");
 
-        String valida = loginPage.validaPassObligatorio();
-        assertTrue(valida.equals("Este campo es obligatorio"));
-        test.log(Status.PASS, "Validación de campo de Contraseña obligatoria");
-        test.log(Status.INFO, "Finaliza el Test");
+            loginPage.insertUsername("");
+            loginPage.insertPassword("Admin123.");
+            test.log(Status.PASS, "Ingreso contraseña sin completar el campo username");
+
+            loginPage.clickLogIn();
+            test.log(Status.PASS, "Presiono el botón Log In");
+
+            actualMessage = loginPage.getErrorMessage();
+            test.log(Status.INFO, "Obtengo el mensaje de validación: " + actualMessage);
+
+            assertEquals(expectedMessage, actualMessage);
+            test.log(Status.PASS, "Validación de campo de username obligatorio exitosa");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación del campo de username obligatorio. Mensaje esperado: '" + expectedMessage + "', pero fue: '" + actualMessage + "'");
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Fallo el test de logueo: " + e.getMessage());
+            captureScreenshot(test, "FAIL_LOGUEO_USERNAME_VACIO", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
     }
 
     @Test
     @Tag("FALLIDO")
-    public void test_LogueoMailInvalido() throws InterruptedException {
-        ExtentTest test = extent.createTest("Logueo Fallido Email Invalido");
+    public void test_LogueoContraseniaVacio() throws InterruptedException {
+        ExtentTest test = extent.createTest("Logueo Fallido por PASSWORD Vacio");
         test.log(Status.INFO, "Comienza el Test");
-        test.log(Status.PASS, "Ingreso en el Login de Digital Booking");
+
         LoginPage loginPage = new LoginPage(driver, wait);
+        String expectedMessage = "Please enter a username and password.";
+        String actualMessage = "";
 
-        loginPage.completarMail("targ5181");
-        loginPage.completarContraseña("Admin123.");
-        test.log(Status.PASS, "Ingreso todos los datos con email Invalido");
+        try {
+            test.log(Status.PASS, "Ingreso en el Login");
 
-        String valida = loginPage.validaMensajeInvalido();
-        assertTrue(valida.equals("El email es inválido"));
-        test.log(Status.PASS, "Validación de email Invalido");
-        test.log(Status.INFO, "Finaliza el Test");
-    }*/
+            loginPage.insertUsername("eldiego");
+            loginPage.insertPassword("");
+            test.log(Status.PASS, "Ingreso username sin completar el campo password");
+
+            loginPage.clickLogIn();
+            test.log(Status.PASS, "Presiono el botón Log In");
+
+            actualMessage = loginPage.getErrorMessage();
+            test.log(Status.INFO, "Obtengo el mensaje de validación: " + actualMessage);
+
+            assertEquals(expectedMessage, actualMessage);
+            test.log(Status.PASS, "Validación de campo de password obligatorio exitosa");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación del campo de password obligatorio. Mensaje esperado: '" + expectedMessage + "', pero fue: '" + actualMessage + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_PASSWORD", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Fallo el test de logueo: " + e.getMessage());
+            captureScreenshot(test, "FAIL_LOGUEO_PASSWORD_VACIO", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
+
+    @Test
+    @Tag("FALLIDO")//The username and password could not be verified.
+    public void test_LogueoUsuarioInvalido() throws InterruptedException {
+        ExtentTest test = extent.createTest("Logueo Fallido por Usuario No Registrado");
+        test.log(Status.INFO, "Comienza el Test");
+
+        LoginPage loginPage = new LoginPage(driver, wait);
+        String expectedMessage = "The username and password could not be verified.";
+        String actualMessage = "";
+
+        try {
+            test.log(Status.PASS, "Ingreso en el Login");
+
+            loginPage.insertUsername("usuarioNoRegistrado");
+            loginPage.insertPassword("contraseña");
+            test.log(Status.PASS, "Ingreso usuario y contraseña no registrados");
+
+            loginPage.clickLogIn();
+            test.log(Status.PASS, "Presiono el botón Log In");
+
+            actualMessage = loginPage.getErrorMessage();
+            test.log(Status.INFO, "Obtengo el mensaje de validación: " + actualMessage);
+
+            assertEquals(expectedMessage, actualMessage);
+            test.log(Status.PASS, "Validación de logueo fallido por usuario no registrado exitosa");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de logueo fallido por usuario no registrado. Mensaje esperado: '" + expectedMessage + "', pero fue: '" + actualMessage + "'");
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Fallo el test de logueo: " + e.getMessage());
+            captureScreenshot(test, "FAIL_LOGUEO_USUARIO_NO_REGISTRADO", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
+        }
+    }
 
     @AfterEach
     public void endTest() throws InterruptedException {

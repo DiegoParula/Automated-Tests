@@ -49,86 +49,80 @@ public class testAccountOverview {
     public void test_TextoVisibleExitoso() throws InterruptedException {
         ExtentTest test = extent.createTest("Resumen de las cuentas");
         test.log(Status.INFO, "Comienza el Test");
-        AccountOverview accountOverview = new AccountOverview(driver,wait);
 
+        AccountOverview accountOverview = new AccountOverview(driver, wait);
+        String expectedMessage = "*Balance includes deposits that may be subject to holds";
+        String actualMessage = "";
         try {
 
-            String mss = accountOverview.getMessage();
+            actualMessage = accountOverview.getMessage();
 
-            test.log(Status.INFO, "Obtengo el mensaje: " + mss);
-            System.out.println(mss);
+            test.log(Status.INFO, "Mensaje obtenido: " + actualMessage);
 
-
-            if (mss.equals("*Balance dsfdsfincludes deposits that may be subject to holds")) {
-                test.log(Status.PASS, "Validando mensaje exitoso");
-            } else {
-                test.log(Status.FAIL, "Fallo validando mensaje exitoso");
-                System.out.println("Fallo validando mensaje exitoso");
-            }
-
-            //test.log(Status.PASS, "Texto Visible");
-        } catch (Exception error) {
-            test.log(Status.FAIL, "FALLO EL TEST DE TEXTO VISIBLE" + error.getMessage());
-            captureScreenshot(test, "FAIL_ACCOUNTOVERVIEW_TEXTVISIBLE", driver);
+            assertEquals(expectedMessage, actualMessage);
+            test.log(Status.PASS, "Validación del mensaje exitoso");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación del mensaje. Mensaje esperado: '" + expectedMessage + "', pero fue: '" + actualMessage + "'");
+            captureScreenshot(test, "FAIL_RESUMEN_CUENTAS", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Fallo en la ejecución del test: " + e.getMessage());
+            captureScreenshot(test, "FAIL_RESUMEN_CUENTAS", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
         }
-        test.log(Status.INFO, "Finaliza el Test");
     }
     @Test
     @Tag("EXITOSO")
     public void test_Actividad_de_la_cuenta() throws InterruptedException {
         ExtentTest test = extent.createTest("Actividad de la cuenta Exitoso");
         test.log(Status.INFO, "Comienza el Test");
+
         String txtVisibleAccountOverview = "*Balance includes deposits that may be subject to holds";
         String txtAccountDetails = "Account Details";
-        AccountOverview accountOverview = new AccountOverview(driver,wait);
-
-        accountOverview.clickOverview();
-        test.log(Status.PASS, "Presiono Account Overview");
-        String mss = accountOverview.getMessage();
-        test.log(Status.PASS, "Obtengo el texto: "+ mss);
-        accountOverview.clickAccount();
-        test.log(Status.PASS, "Presiono en una cuenta");
-        String messageAcountDetails = accountOverview.getAccountDetails();
-        test.log(Status.PASS, "Obtengo el texto: "+ messageAcountDetails);
-        accountOverview.clickActivityPeriod();
-        accountOverview.clickGetActivityPeriodAll();
-        test.log(Status.PASS, "Presiono Activity Period y selecciono all");
-        accountOverview.clickType();
-        accountOverview.getTypeAll();
-        test.log(Status.PASS, "Presiono Type y selecciono all");
-        accountOverview.clickSubmitGo();
-
+        String mss = "";
+        String messageAcountDetails = "";
+        AccountOverview accountOverview = new AccountOverview(driver, wait);
 
         try {
-            assertEquals(txtVisibleAccountOverview, mss);
-            test.log(Status.PASS, "Validación de texto " +txtVisibleAccountOverview+" visibles en la pantalla exitosa.");
-        } catch (AssertionError e) {
-            test.log(Status.FAIL, "Fallo Validación de textos visibles en la pantalla: '" + txtVisibleAccountOverview + "' pero fue: '" + mss + "'");
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
-            throw e;
+            accountOverview.clickOverview();
+            test.log(Status.PASS, "Presiono Account Overview");
 
-        }catch (Exception ex){
-            test.log(Status.FAIL, "Ocurrió un error: " + ex.getMessage());
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
+            mss = accountOverview.getMessage();
+            test.log(Status.PASS, "Obtengo el texto: " + mss);
+
+            assertEquals(txtVisibleAccountOverview, mss);
+            test.log(Status.PASS, "Validación de texto '" + txtVisibleAccountOverview + "' visible en la pantalla exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Fallo Validación de texto visible en la pantalla: '" + txtVisibleAccountOverview + "'. Mensaje obtenido: '" + mss + "'");
+            throw e;
+        } catch (Exception ex) {
+            test.log(Status.FAIL, "Ocurrió un error al obtener el mensaje de Account Overview: " + ex.getMessage());
+            captureScreenshot(test, "FAIL_OBTENER_TEXTO_ACCOUNT_OVERVIEW", driver);
+            throw ex;
         }
 
         try {
+            accountOverview.clickAccount();
+            test.log(Status.PASS, "Presiono en una cuenta");
+
+            messageAcountDetails = accountOverview.getAccountDetails();
+            test.log(Status.PASS, "Obtengo el texto: " + messageAcountDetails);
+
             assertEquals(txtAccountDetails, messageAcountDetails);
-            test.log(Status.PASS, "Validación de texto " +txtAccountDetails +" visibles en la pantalla exitosa.");
+            test.log(Status.PASS, "Validación de texto '" + txtAccountDetails + "' visible en la pantalla exitosa.");
         } catch (AssertionError e) {
-
-            test.log(Status.FAIL, "Fallo Validación de textos visibles en la pantalla: '" + txtAccountDetails + "' pero fue: '" + messageAcountDetails + "'");
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
+            test.log(Status.FAIL, "Fallo Validación de texto visible en la pantalla: '" + txtAccountDetails + "'. Mensaje obtenido: '" + messageAcountDetails + "'");
             throw e;
-
-        }catch (Exception ex){
-            test.log(Status.FAIL, "Ocurrió un error: " + ex.getMessage());
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
-        }finally {
+        } catch (Exception ex) {
+            test.log(Status.FAIL, "Ocurrió un error al obtener el mensaje de Account Details: " + ex.getMessage());
+            captureScreenshot(test, "FAIL_OBTENER_TEXTO_ACCOUNT_DETAILS", driver);
+            throw ex;
+        } finally {
             test.log(Status.INFO, "Finaliza el Test");
         }
     }
-
     @AfterEach
     public void endTest() throws InterruptedException {
         LoginPage loginPage = new LoginPage(driver, wait);
@@ -138,6 +132,6 @@ public class testAccountOverview {
     @AfterAll
     public static void finish() {
         extent.flush();
-        System.out.println("<<< FINALIZAN LOS TEST DE NEW ACCOUNT >>>");
+        System.out.println("<<< FINALIZAN LOS TEST DE ACCOUNT OVERVIEW >>>");
     }
 }

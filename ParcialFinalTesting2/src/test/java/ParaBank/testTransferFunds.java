@@ -51,53 +51,57 @@ public class testTransferFunds {
         test.log(Status.INFO, "Comienza el Test");
         String txtTitleTransferFunds = "Transfer Funds";
         String txtTransferComplete = "Transfer Complete!";
-        TransferFunds transferFunds = new TransferFunds(driver,wait);
-
-        transferFunds.clickTransfer();
-        test.log(Status.PASS, "Presiono Transfer Founds");
-        String mss = transferFunds.titleTransfer();
-        test.log(Status.PASS, "Obtengo el texto: "+ mss);
-        transferFunds.insertAmount("45000");
-        test.log(Status.PASS, "Ingreso un monto a tranferir");
-        transferFunds.clickFromAccount();
-        transferFunds.selectFromAccountNumber();
-        test.log(Status.PASS, "Selecciono desde que cuenta");
-        transferFunds.clickToAccount();
-        transferFunds.selectToAccountNumber();
-        test.log(Status.PASS, "Selecciono a cual cuenta");
-        transferFunds.clickSubmitTransfer();
-        test.log(Status.PASS, "Presiono Transfer");
-        String messageComplete = transferFunds.transferComplete();
-        test.log(Status.PASS, "Obtengo el texto: "+ messageComplete);
-
-
+        TransferFunds transferFunds = new TransferFunds(driver, wait);
 
         try {
-            assertEquals(txtTitleTransferFunds, mss);
-            test.log(Status.PASS, "Validación de texto " +txtTitleTransferFunds+" visibles en la pantalla exitosa.");
-        } catch (AssertionError e) {
-            test.log(Status.FAIL, "Fallo Validación de textos visibles en la pantalla: '" + txtTitleTransferFunds + "' pero fue: '" + mss + "'");
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
-            throw e;
+            transferFunds.clickTransfer();
+            test.log(Status.PASS, "Presiono Transfer Founds");
 
-        }catch (Exception ex){
-            test.log(Status.FAIL, "Ocurrió un error: " + ex.getMessage());
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
-        }
+            String mss = transferFunds.titleTransfer();
+            test.log(Status.PASS, "Obtengo el texto: " + mss);
 
-        try {
-            assertEquals(txtTransferComplete, messageComplete);
-            test.log(Status.PASS, "Validación de texto " +txtTransferComplete +" visibles en la pantalla exitosa.");
-        } catch (AssertionError e) {
+            transferFunds.insertAmount("45000");
+            test.log(Status.PASS, "Ingreso un monto a transferir");
 
-            test.log(Status.FAIL, "Fallo Validación de textos visibles en la pantalla: '" + txtTransferComplete + "' pero fue: '" + messageComplete + "'");
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
-            throw e;
+            transferFunds.clickFromAccount();
+            transferFunds.selectFromAccountNumber();
+            test.log(Status.PASS, "Selecciono desde que cuenta");
 
-        }catch (Exception ex){
-            test.log(Status.FAIL, "Ocurrió un error: " + ex.getMessage());
-            captureScreenshot(test, "FAIL_TEXTO_VISIBLE", driver);
-        }finally {
+            transferFunds.clickToAccount();
+            transferFunds.selectToAccountNumber();
+            test.log(Status.PASS, "Selecciono a cual cuenta");
+
+            transferFunds.clickSubmitTransfer();
+            test.log(Status.PASS, "Presiono Transfer");
+
+            String messageComplete = transferFunds.transferComplete();
+            test.log(Status.PASS, "Obtengo el texto: " + messageComplete);
+
+            // Validación del título de la pantalla de transferencia
+            try {
+                assertEquals(txtTitleTransferFunds, mss);
+                test.log(Status.PASS, "Validación de texto " + txtTitleTransferFunds + " visible en la pantalla exitosa.");
+            } catch (AssertionError e) {
+                test.log(Status.FAIL, "Fallo validación de texto visible en la pantalla: '" + txtTitleTransferFunds + "' pero fue: '" + mss + "'");
+                captureScreenshot(test, "FAIL_TEXTO_VISIBLE_TITLE", driver);
+                throw e;
+            }
+
+            // Validación del mensaje de transferencia completa
+            try {
+                assertEquals(txtTransferComplete, messageComplete);
+                test.log(Status.PASS, "Validación de texto " + txtTransferComplete + " visible en la pantalla exitosa.");
+            } catch (AssertionError e) {
+                test.log(Status.FAIL, "Fallo validación de texto visible en la pantalla: '" + txtTransferComplete + "' pero fue: '" + messageComplete + "'");
+                captureScreenshot(test, "FAIL_TEXTO_VISIBLE_COMPLETE", driver);
+                throw e;
+            }
+
+        } catch (Exception ex) {
+            test.log(Status.FAIL, "Ocurrió un error durante la transferencia de fondos: " + ex.getMessage());
+            captureScreenshot(test, "ERROR_DURANTE_TRANSFERENCIA", driver);
+            throw ex;
+        } finally {
             test.log(Status.INFO, "Finaliza el Test");
         }
     }
@@ -111,6 +115,6 @@ public class testTransferFunds {
     @AfterAll
     public static void finish() {
         extent.flush();
-        System.out.println("<<< FINALIZAN LOS TEST DE NEW ACCOUNT >>>");
+        System.out.println("<<< FINALIZAN LOS TEST DE TRANSFER FUNDS >>>");
     }
 }

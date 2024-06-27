@@ -14,6 +14,7 @@ import reportes.ReportFactory;
 
 import java.time.Duration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static reportes.ReportFactory.captureScreenshot;
 
 @Tag("NEWACCOUNT")
@@ -50,40 +51,47 @@ public class testNewAccount{
         ExtentTest test = extent.createTest("New Account Exitoso");
         test.log(Status.INFO, "Comienza el Test");
 
-        NewAccount newAccount = new NewAccount(driver, wait);;
+        NewAccount newAccount = new NewAccount(driver, wait);
+        String expectedMessage = "Congratulations, your account is now open.";
+        String mss = null;
+
         try {
             newAccount.openNewAccount();
             test.log(Status.PASS, "Presiono Open New Account");
+
             newAccount.typeAccount();
             test.log(Status.PASS, "Presiono type of account");
+
             newAccount.selectAccount();
             test.log(Status.PASS, "Selecciono la cuenta SAVINGS");
+
             newAccount.account();
             test.log(Status.PASS, "Presiono para seleccionar la cuenta");
+
             newAccount.selectAccount();
             test.log(Status.PASS, "Selecciono el número de cuenta");
+
             newAccount.openAccountForm();
             test.log(Status.PASS, "Presiono Open New Account");
 
-            String mss = newAccount.getMessageSuccess();
-
-            test.log(Status.INFO, "Obtengo el mensaje de exito: " + mss);
+            mss = newAccount.getMessageSuccess();
+            test.log(Status.INFO, "Obtengo el mensaje de éxito: " + mss);
             System.out.println(mss);
 
-
-            if (mss.equals("Congratulations, your account is now open.")) {
-                test.log(Status.PASS, "Validando mensaje exitoso");
-            } else {
-                test.log(Status.FAIL, "Fallo validando mensaje exitoso");
-                System.out.println("Fallo validando mensaje exitoso");
-            }
-
+            assertEquals(expectedMessage, mss);
+            test.log(Status.PASS, "Validación de mensaje exitoso");
             test.log(Status.PASS, "Cuenta creada con éxito");
-        } catch (Exception error) {
-            test.log(Status.FAIL, "FALLO EL TEST DE CREACION DE CUENTA" + error.getMessage());
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación del mensaje de éxito. Mensaje esperado: '" + expectedMessage + "', pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_MENSAJE", driver);
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Fallo el test de creación de cuenta: " + e.getMessage());
             captureScreenshot(test, "FAIL_NEWACCOUNT", driver);
+            throw e;
+        } finally {
+            test.log(Status.INFO, "Finaliza el Test");
         }
-        test.log(Status.INFO, "Finaliza el Test");
     }
     @AfterEach
     public void endTest() throws InterruptedException {

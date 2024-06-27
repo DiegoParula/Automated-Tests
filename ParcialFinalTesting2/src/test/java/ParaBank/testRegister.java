@@ -14,6 +14,7 @@ import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static reportes.ReportFactory.captureScreenshot;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class testRegister {
@@ -46,33 +47,45 @@ public class testRegister {
     public void RegistroExitoso() throws InterruptedException {
         ExtentTest test = extent.createTest("Registro Exitoso");
         test.log(Status.INFO, "Comienza el Test");
+
         RegisterPage registerPage = new RegisterPage(driver, wait);
-        registerPage.clickRegister();
-        test.log(Status.PASS, "Presiono el botón Register");
-        registerPage.insertName("Evan");
-        registerPage.insertLastName("Armstrong");
-        registerPage.insertAddress("P.O. Box 256, 1634 Libero Road");
-        registerPage.insertCity("South Africa");
-        registerPage.insertState("Sevastopol City");
-        registerPage.insertZip("296332");
-        registerPage.insertPhone("(177) 839-3197");
-        registerPage.insertSsn("1234");
-        registerPage.insertUsername("eldiego");
-        registerPage.insertPassword("123456");
-        registerPage.insertRePassword("123456");
-        test.log(Status.PASS, "Ingreso los datos para el registro");
-        registerPage.clickSubmitRegister();
-        test.log(Status.PASS, "Presiono el botón Register");
-
-
-
-        String mensajeExito = registerPage.getMessageSuccess();
         String expectedMessage = "Your account was created successfully. You are now logged in.";
+        String mensajeExito = null;
+
         try {
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Evan");
+            registerPage.insertLastName("Armstrong");
+            registerPage.insertAddress("P.O. Box 256, 1634 Libero Road");
+            registerPage.insertCity("South Africa");
+            registerPage.insertState("Sevastopol City");
+            registerPage.insertZip("296332");
+            registerPage.insertPhone("(177) 839-3197");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("eldiego");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+
+            test.log(Status.PASS, "Ingreso los datos para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mensajeExito = registerPage.getMessageSuccess();
+            test.log(Status.INFO, "Obtengo el mensaje de éxito: " + mensajeExito);
+
             assertEquals(expectedMessage, mensajeExito);
-            test.log(Status.PASS, "Validación cuenta creada con exito");
+            test.log(Status.PASS, "Validación de cuenta creada con éxito.");
+            System.out.println(mensajeExito);
         } catch (AssertionError e) {
-            test.log(Status.FAIL, "Error en la validación del registro: esperado: '" + expectedMessage + "' pero fue: '" + mensajeExito + "'");
+            test.log(Status.FAIL, "Error en la validación del registro. Mensaje esperado: '" + expectedMessage + "', pero fue: '" + mensajeExito + "'");
+
+            throw e;
+        } catch (Exception e) {
+            test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
             throw e;
         } finally {
             test.log(Status.INFO, "Finaliza el test");
@@ -80,40 +93,42 @@ public class testRegister {
 
     }
 
-/*    @Test
+    @Test
     @Order(2)
     @Tag("REGISTRO")
     @Tag("FALLIDO")
-    public void RegistroFallidoMailRepetido() throws InterruptedException {
-        ExtentTest test = extent.createTest("Registro Fallido Mail Repetido");
+    public void RegistroFallidoUsuarioRepetido() throws InterruptedException {
+        ExtentTest test = extent.createTest("Registro Fallido Usuario Repetido");
         test.log(Status.INFO, "Comienza el Test");
         String mss = null;
-        String expectedMessage = "Warning: E-Mail Address is already registered!";
+        String expectedMessage = "This username already exists.";
         try {
             RegisterPage registerPage = new RegisterPage(driver, wait);
-            registerPage.clickMyAccount();
-            test.log(Status.PASS, "Presiono el botón My Account");
             registerPage.clickRegister();
             test.log(Status.PASS, "Presiono el botón Register");
-            registerPage.ingresarName("Kiona");
-            registerPage.ingresarApellido("Heath");
-            registerPage.ingresarMail("nunc.sit@outlook.couk");
-            test.log(Status.PASS, "Ingresó mail repetido");
-            registerPage.ingresarTelephone("(238) 996-2450");
-            registerPage.ingresarContrasenia("1234");
-            registerPage.confirmarConytrasenia("1234");
-            test.log(Status.PASS, "Ingresó los datos del registro");
-            registerPage.clickNoNewsletter();
-            registerPage.clickAgree();
-            registerPage.clickSubmit();
-            test.log(Status.PASS, "Completó el registro y aceptó los términos");
-            mss = registerPage.mailRegistrado();
+            registerPage.insertName("Evan");
+            registerPage.insertLastName("Armstrong");
+            registerPage.insertAddress("P.O. Box 256, 1634 Libero Road");
+            registerPage.insertCity("South Africa");
+            registerPage.insertState("Sevastopol City");
+            registerPage.insertZip("296332");
+            registerPage.insertPhone("(177) 839-3197");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("eldiego");
+            test.log(Status.PASS, "Ingreso un username ya registrado");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("123456");
+            test.log(Status.PASS, "Ingreso los datos para el registro");
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+            mss = registerPage.getMessageUserNameError();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
 
             assertEquals(expectedMessage, mss);
-            test.log(Status.PASS, "Validacion de mail repetido exitosa");
+            test.log(Status.PASS, "Validacion de username repetido exitosa");
 
         } catch (AssertionError e) {
-            test.log(Status.FAIL, "Error en la validación del mail repetido: mensajes esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            test.log(Status.FAIL, "Error en la validación del username repetido: mensajes esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
             throw e;
         } catch (Exception e) {
             test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
@@ -123,7 +138,7 @@ public class testRegister {
             test.log(Status.INFO, "Finaliza el Test");
         }
     }
-*/
+
     @Test
     @Order(3)
     @Tag("REGISTRO")
@@ -131,39 +146,45 @@ public class testRegister {
     public void RegistroFallidoConfirmacionContrasenia() throws InterruptedException {
         ExtentTest test = extent.createTest("Registro Fallido Contraseña Confirmación No Coincide");
         test.log(Status.INFO, "Comienza el Test");
-        String mss = null;
-        String expectedMessage = "Passwords did not match.";
-        RegisterPage registerPage = new RegisterPage(driver, wait);
-        registerPage.clickRegister();
-        test.log(Status.PASS, "Presiono el botón Register");
-        registerPage.insertName("Aladdin");
-        registerPage.insertLastName("Benjamin");
-        registerPage.insertAddress("nunc@yahoo.org");
-        registerPage.insertCity("Guanacaste");
-        registerPage.insertState("Mexico");
-        registerPage.insertZip("675098");
-        registerPage.insertPhone("1-763-741-2781");
-        registerPage.insertSsn("1234");
-        registerPage.insertUsername("Aladdin");
-        registerPage.insertPassword("123456");
-        registerPage.insertRePassword("1234");
-        test.log(Status.PASS, "Ingreso contraseñas diferentes");
-        test.log(Status.PASS, "Ingreso todos los datos para el registro");
-        registerPage.clickSubmitRegister();
-        test.log(Status.PASS, "Presiono el botón Register");
 
-        mss = registerPage.getMessageErrorPass();
+        String expectedMessage = "Passwords did not match.";
+        String mss = null;
+        RegisterPage registerPage = new RegisterPage(driver, wait);
 
         try {
-            assertTrue(mss.equals(mss));
-            test.log(Status.PASS, "Validación contraseña confirmación exitosa.");
-        }catch (AssertionError e) {
-            test.log(Status.FAIL, "Error en la validación de contraseña confirmación, mensajes esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            registerPage.clickRegister();
+            test.log(Status.PASS, "Presiono el botón Register");
+
+            registerPage.insertName("Aladdin");
+            registerPage.insertLastName("Benjamin");
+            registerPage.insertAddress("nunc@yahoo.org");
+            registerPage.insertCity("Guanacaste");
+            registerPage.insertState("Mexico");
+            registerPage.insertZip("675098");
+            registerPage.insertPhone("1-763-741-2781");
+            registerPage.insertSsn("1234");
+            registerPage.insertUsername("Aladdin");
+            registerPage.insertPassword("123456");
+            registerPage.insertRePassword("1234");
+
+            test.log(Status.PASS, "Ingreso contraseñas diferentes y todos los datos para el registro");
+
+            registerPage.clickSubmitRegister();
+            test.log(Status.PASS, "Presiono el botón Submit Register");
+
+            mss = registerPage.getMessageErrorPass();
+            test.log(Status.INFO, "Obtengo el mensaje de error: " + mss);
+
+            assertEquals(mss, expectedMessage);
+            test.log(Status.PASS, "Validación de que la contraseña de confirmación no coincide exitosa.");
+        } catch (AssertionError e) {
+            test.log(Status.FAIL, "Error en la validación de contraseña de confirmación. Mensaje esperado: '" + expectedMessage + "' pero fue: '" + mss + "'");
+            captureScreenshot(test, "FAIL_VALIDACION_CONTRASENA", driver);
             throw e;
         } catch (Exception e) {
             test.log(Status.FAIL, "Ocurrió un error: " + e.getMessage());
+            captureScreenshot(test, "ERROR_GENERAL", driver);
             throw e;
-
         } finally {
             test.log(Status.INFO, "Finaliza el Test");
         }

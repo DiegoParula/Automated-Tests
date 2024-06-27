@@ -17,6 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class Test_GET {
     static ExtentSparkReporter info = new ExtentSparkReporter("reportes/APIGET-Test.html");
     static ExtentReports extent;
+    private static final String USERNAME = "eldiego";
+    private static final String PASSWORD = "123456";
+    private static final String ACCOUNTID = "13100";
 
     @BeforeAll
     public static void setup() {
@@ -74,7 +77,7 @@ public class Test_GET {
         int expectedCode = 200;
         int statusCode = 0;
         try{
-        Response responseGet = RestAssured.get("http://parabank.parasoft.com/parabank/services/bank/customers/13766/accounts");
+        Response responseGet = RestAssured.get("http://parabank.parasoft.com/parabank/services/bank/customers/"+ACCOUNTID+"/accounts");
 
         statusCode = responseGet.statusCode();
         System.out.println(responseGet.statusCode());
@@ -113,7 +116,7 @@ public class Test_GET {
         test.log(Status.INFO, "Iniciando Tercer Test Get");
 
         given()
-                .auth().basic("eldiego", "123456")
+                .auth().basic(USERNAME, PASSWORD)
                 .get("https://parabank.parasoft.com/parabank/services_proxy/bank/accounts/13566/transactions/month/All/type/All")
                 .then()
                 .statusCode(200)

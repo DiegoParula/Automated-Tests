@@ -20,6 +20,7 @@ public class RegisterPage extends BasePage{
     private By btnSubmitRegister = By.xpath("//*[@id=\"customerForm\"]/table/tbody/tr[13]/td[2]/input");
     private By messageSuccess = By.xpath("//*[@id=\"rightPanel\"]/p");
     //Your account was created successfully. You are now logged in.
+    private By messageUserNameError = By.id("customer.username.errors");
 
     private By errorPass = By.id("repeatedPassword.errors");
 
@@ -84,6 +85,12 @@ public class RegisterPage extends BasePage{
 
     public String getMessageErrorPass() throws InterruptedException {
         String res = this.getText(errorPass);
+        System.out.println(res);
+        return res;
+    }
+
+    public String getMessageUserNameError() throws InterruptedException {
+        String res = this.getText(messageUserNameError);
         System.out.println(res);
         return res;
     }
